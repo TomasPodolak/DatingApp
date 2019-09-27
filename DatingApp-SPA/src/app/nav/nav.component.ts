@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 //*import { AlertifyService } from '../_services/alertify.service';*/
 import { Sweetalert2Service } from '../_services/sweetalert2.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav',
@@ -11,7 +12,7 @@ import { Sweetalert2Service } from '../_services/sweetalert2.service';
 export class NavComponent implements OnInit {
   model: any = {};
 
-  constructor(public authService: AuthService, /*private alertify: AlertifyService,*/ private swal: Sweetalert2Service) { }
+  constructor(public authService: AuthService, /*private alertify: AlertifyService,*/ private swal: Sweetalert2Service, private router: Router) { }
 
   ngOnInit() {
   }
@@ -19,11 +20,14 @@ export class NavComponent implements OnInit {
   login() {
     this.authService.login(this.model).subscribe(next => {
       //this.alertify.success('Logged in successffully');
-      this.swal.success('Logged in successffully');
+      this.swal.success('Logged in successffully');      
     },
     error => {
       //this.alertify.error(error);
       this.swal.error(error);
+    },
+    () => {
+      this.router.navigate(['/members']);
     }
     );
   }
@@ -36,6 +40,7 @@ export class NavComponent implements OnInit {
     localStorage.removeItem('token');
     //this.alertify.message('logged out');
     this.swal.message('Logged in successffully');
+    this.router.navigate(['home']);
   }
 
 }
