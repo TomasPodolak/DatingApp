@@ -11,7 +11,7 @@ import { Sweetalert2Service } from '../_services/sweetalert2.service';
 export class NavComponent implements OnInit {
   model: any = {};
 
-  constructor(private authService: AuthService, /*private alertify: AlertifyService,*/ private swal: Sweetalert2Service) { }
+  constructor(public authService: AuthService, /*private alertify: AlertifyService,*/ private swal: Sweetalert2Service) { }
 
   ngOnInit() {
   }
@@ -29,8 +29,7 @@ export class NavComponent implements OnInit {
   }
 
   loggedIn() {
-    const token = localStorage.getItem('token');
-    return !!token;
+    return this.authService.loggedIn();
   }
 
   logout() {
