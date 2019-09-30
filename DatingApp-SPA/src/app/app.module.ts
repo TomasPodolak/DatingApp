@@ -13,10 +13,11 @@ import { ErrorInterceptorProvider } from './_services/error.interceptor';
 import { BsDropdownModule } from 'ngx-bootstrap';
 import { AlertifyService } from './_services/alertify.service';
 import { Sweetalert2Service } from './_services/sweetalert2.service';
-import { MemberListComponent } from './member-list/member-list.component';
+import { MemberListComponent } from './members/member-list/member-list.component';
 import { ListsComponent } from './lists/lists.component';
 import { MessagesComponent } from './messages/messages.component';
 import { appRoutes } from './routes';
+import { MebmerCardComponent } from './members/mebmer-card/mebmer-card.component';
 
 @NgModule({
    declarations: [
@@ -26,7 +27,8 @@ import { appRoutes } from './routes';
       RegisterComponent,
       MemberListComponent,
       ListsComponent,
-      MessagesComponent
+      MessagesComponent,
+      MebmerCardComponent
    ],
    imports: [
       BrowserModule,
