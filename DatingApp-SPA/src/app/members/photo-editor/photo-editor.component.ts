@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/_services/auth.service';
 import { UserService } from 'src/app/_services/user.service';
 import { Sweetalert2Service } from 'src/app/_services/sweetalert2.service';
+import { AlertifyService } from 'src/app/_services/alertify.service';
 
 @Component({
   selector: 'app-photo-editor',
@@ -20,7 +21,7 @@ export class PhotoEditorComponent implements OnInit {
   baseUrl = environment.apiUrl;
   currentMain: Photo;
 
-  constructor(private authService: AuthService, private userService: UserService, private sweetalert2: Sweetalert2Service ) { }
+  constructor(private authService: AuthService, private userService: UserService, private sweetalert2: Sweetalert2Service, private alertify: AlertifyService ) { }
 
   ngOnInit() {
     this.initializeUploader();
@@ -67,10 +68,24 @@ export class PhotoEditorComponent implements OnInit {
       this.currentMain = this.photos.filter( p => p.isMain === true)[0];
       this.currentMain.isMain = false;
       photo.isMain = true;
-      this.getMemberPhotoChange.emit(photo.url);
+      this.authService.changeMemberPhoto(photo.url);
+      this.authService.currentUser.photoUrl = photo.url;
+      localStorage.setItem('user', JSON.stringify(this.authService.currentUser));
     },
     error => {
       this.sweetalert2.error(error);
+    });
+  }
+
+  deletePhoto(id: number) {
+    this.alertify.confirm('Are you sure you want to delete this photo?', () => {
+      this.userService.deletePhoto(this.authService.decodedToken.nameid, id).subscribe( () => {
+        this.photos.splice(this.photos.findIndex(p => p.id === id), 1);
+        this.sweetalert2.success('Photo has been deleted');
+      },
+      error => {
+        this.sweetalert2.error('Failed to delete the photo');
+      });
     });
   }
 }
