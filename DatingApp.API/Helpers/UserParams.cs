@@ -9,6 +9,7 @@ namespace DatingApp.API.Helpers
         public int UserId { get; set; }
         public int minAge { get; set; } = 18;
         public int maxAge { get; set; } = 99;
+        public string OrderBy { get; set; }
         
         public int PageSize
         {
