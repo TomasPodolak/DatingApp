@@ -5,6 +5,7 @@ import { UserService } from '../_services/user.service';
 import { AuthService } from '../_services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { Sweetalert2Service } from '../_services/sweetalert2.service';
+import { AlertifyService } from '../_services/alertify.service';
 
 @Component({
   selector: 'app-messages',
@@ -19,7 +20,8 @@ export class MessagesComponent implements OnInit {
   constructor(private userService: UserService,
               private authService: AuthService,
               private route: ActivatedRoute,
-              private sweetAlert2: Sweetalert2Service) { }
+              private sweetAlert2: Sweetalert2Service,
+              private altertify: AlertifyService) { }
 
   ngOnInit() {
     this.route.data.subscribe(data => {
@@ -40,6 +42,18 @@ export class MessagesComponent implements OnInit {
       error => {
         this.sweetAlert2.error(error);
       });
+  }
+
+  deleteMessage(id: number) {
+    this.altertify.confirm('Are you sure to delete this message?', () => {
+      this.userService.deleteMessage(id, this.authService.decodedToken.nameid).subscribe(() => {
+        this.messages.splice(this.messages.findIndex(m => m.id === id), 1);
+        this.sweetAlert2.success('Messages hes been deleted');
+      },
+      error => {
+        this.sweetAlert2.error(error);
+      });
+    });
   }
 
   pageChanged(event: any) {
